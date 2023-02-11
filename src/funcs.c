@@ -7,11 +7,12 @@
 char *get_distro_name()
 {
     FILE *os_release_fp = fopen("/etc/os-release", "r");
+    if(os_release_fp == NULL)
+        perror("Failed to open \'/etc/os-release\'"), exit(1);
+
     char *line = (char *)malloc(LINE_LEN * sizeof(char));
     if(line == NULL)
-    {
-        perror("\'get_distro_name\' failed");
-    }
+        perror("\'get_distro_name\' failed"), exit(1);
 
     // get every line until the 'PRETTY_NAME' line
     do
@@ -42,11 +43,11 @@ char *get_kernel_version()
     // 'popen' executes the command and returns a pointer to the output stream
     FILE *uname_r_fp = popen("uname -r", "r");
     if(!uname_r_fp)
-        perror("\'uname -r\'");
+        perror("Failed to execute \'uname -r\'"), exit(1);
 
     char *kern_ver = (char *)malloc(LINE_LEN * sizeof(char));
     if(!kern_ver)
-        perror("\'get_kernel_version\' failed");
+        perror("\'get_kernel_version\' failed"), exit(1);
 
     // read a full line from the output (there's only one for uname -r)
     fgets(kern_ver, LINE_LEN, uname_r_fp);
@@ -66,11 +67,11 @@ char *get_username()
     // execute 'whoami'
     FILE *username_fp = popen("whoami", "r");
     if(!username_fp)
-        perror("\'whoami\'");
+        perror("Failed to execute \'whoami\'"), exit(1);
 
     char *username = (char *)malloc(LINE_LEN * sizeof(char));
     if(!username)
-        perror("\'get_username\' failed");
+        perror("\'get_username\' failed"), exit(1);
 
     // get the output and strip the trailing '\n'
     fgets(username, LINE_LEN, username_fp);
@@ -89,11 +90,11 @@ char *get_hostname()
     // execute 'hostname'
     FILE *hostname_fp = popen("cat /etc/hostname", "r");
     if(!hostname_fp)
-        perror("\'hostname\'");
+        perror("Failed to execute \'hostname\'"), exit(1);
 
     char *hostname = (char *)malloc(LINE_LEN * sizeof(char));
     if(!hostname)
-        perror("\'get_hostname\' failed");
+        perror("\'get_hostname\' failed"), exit(1);
 
     // put the output in a string and strip the trailing '\n'
     fgets(hostname, LINE_LEN, hostname_fp);
@@ -112,11 +113,11 @@ char *get_shell()
     // open a stream to the output of `echo $SHELL`
     FILE *shell_fp = popen("echo $SHELL", "r");
     if(shell_fp == NULL)
-        perror("\'shell\'");
+        perror("Failed to execute \'exho $SHELL\'"), exit(1);
 
     char *shell = (char *)malloc(LINE_LEN * sizeof(char));
     if(shell == NULL)
-        perror("\'get_shell\' failed");
+        perror("\'get_shell\' failed"), exit(1);
 
     // Get the shell path from the output and remove the trailing newline char
     fgets(shell, LINE_LEN, shell_fp);
@@ -145,7 +146,7 @@ char *print_icon(char *os_name)
     // create a new array with the same size as the original one
     char *tmp = (char *)malloc(strlen(os_name) * sizeof(char));
     if(tmp == NULL)
-        perror("\'print_icon\' failed");
+        perror("\'print_icon\' failed"), exit(1);
 
     // copy the os name to the tmp array and lowercase the distro name
     strcpy(tmp, os_name);
