@@ -276,9 +276,33 @@ char *print_icon(char *os_name)
 }
 
 /**
+ * Dynamically allocate the struct containing all the informations about the os
+*/
+os_info_t *create_os_info_struct()
+{
+    os_info_t *info = (os_info_t *)malloc(sizeof(os_info_t));
+    if(info == NULL)
+        perror("OS info struct creation failed"), exit(1);
+
+    return info;
+}
+
+/**
+ * Call all the needed functions and populate the os info struct
+*/
+void gather_os_infos(os_info_t *os_info_struct)
+{
+    os_info_struct->username = get_username();
+    os_info_struct->hostname = get_hostname();
+    os_info_struct->os_name = get_distro_name();
+    os_info_struct->kernel_version = get_kernel_version();
+    os_info_struct->shell = get_shell();
+}
+
+/**
  * free the memory from the data structure containing the os infos
 */
-void free_all(os_info_t *os_info_struct)
+void free_os_info_struct(os_info_t *os_info_struct)
 {
     free(os_info_struct->hostname);
     free(os_info_struct->kernel_version);

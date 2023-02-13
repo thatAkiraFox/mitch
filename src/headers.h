@@ -22,6 +22,16 @@
 #define SHELL_ICON  "\ue795"
 
 /**
+ * output left-column labels
+*/
+
+#define USER_LABEL "User"
+#define HOST_LABEL "Host"
+#define DISTRO_LABEL "Distro"
+#define KERNEL_LABEL "Kernel"
+#define SHELL_LABEL "Shell"
+
+/**
  * bold text colors
 */
 #define BBLK "\e[1;30m"
@@ -84,6 +94,8 @@ char *get_username();
 char *get_hostname();
 char *get_shell();
 char *print_icon(char *os_name);
-void free_all(os_info_t *os_info_struct);
+os_info_t *create_os_info_struct();
+void gather_os_infos(os_info_t *os_info_struct);
+void free_os_info_struct(os_info_t *os_info_struct);
 
 #endif

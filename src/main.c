@@ -3,14 +3,10 @@
 int main()
 {
     // declare the struct containing the needed data
-    os_info_t os_info;
+    os_info_t *os_info = create_os_info_struct();
 
     // initialize the struct
-    os_info.os_name = get_distro_name();
-    os_info.kernel_version = get_kernel_version();
-    os_info.username = get_username();
-    os_info.hostname = get_hostname();
-    os_info.shell = get_shell();
+    gather_os_infos(os_info);
 
     // top padding
     printf("\n");
@@ -18,38 +14,40 @@ int main()
     // formatted output
     printf(BRED "%*s" RST "  %s  " BRED "%s\n" RST,
         PADDING,
-        "User",
+        USER_LABEL,
         USER_ICON,
-        os_info.username);
+        os_info->username);
 
     printf(BGRN "%*s" RST "  %s  " BGRN "%s\n" RST,
         PADDING,
-        "Host",
+        HOST_LABEL,
         HOST_ICON,
-        os_info.hostname);
+        os_info->hostname);
 
     printf(BBLU "%*s" RST "  %s  " BBLU "%s\n" RST,
         PADDING,
-        "Distro",
-        print_icon(os_info.os_name),
-        os_info.os_name);
+        DISTRO_LABEL,
+        print_icon(os_info->os_name),
+        os_info->os_name);
 
     printf(BYEL "%*s" RST "  %s  " BYEL "%s\n" RST,
         PADDING,
-        "Kernel",
+        KERNEL_LABEL,
         KERNEL_ICON,
-        os_info.kernel_version);
+        os_info->kernel_version);
 
     printf(BMAG "%*s" RST "  %s  " BMAG "%s\n" RST,
         PADDING,
-        "Shell",
+        SHELL_LABEL,
         SHELL_ICON,
-        os_info.shell);
+        os_info->shell);
 
     // bottom padding
     printf(" \n");
 
-    free_all(&os_info);
+    // free the memory before exiting
+    free_os_info_struct(os_info);
+    free(os_info);
 
     return 0;
 }
