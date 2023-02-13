@@ -12,8 +12,11 @@ int main()
     os_info.hostname = get_hostname();
     os_info.shell = get_shell();
 
-    // print formatted infos
-    printf(BRED "\n%*s" RST "  %s  " BRED "%s\n" RST,
+    // top padding
+    printf("\n");
+
+    // formatted output
+    printf(BRED "%*s" RST "  %s  " BRED "%s\n" RST,
         PADDING,
         "User",
         USER_ICON,
@@ -37,11 +40,14 @@ int main()
         KERNEL_ICON,
         os_info.kernel_version);
 
-    printf(BMAG "%*s" RST "  %s  " BMAG "%s\n" RST "\n",
+    printf(BMAG "%*s" RST "  %s  " BMAG "%s\n" RST,
         PADDING,
         "Shell",
         SHELL_ICON,
         os_info.shell);
+
+    // bottom padding
+    printf(" \n");
 
     free_all(&os_info);
 
